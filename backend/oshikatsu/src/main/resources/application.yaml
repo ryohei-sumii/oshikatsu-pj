@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: oshikatsu
+
+  # データソース設定(MySQL)
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:oshikatsu_db}?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
+    username: ${DB_USERNAME:ryodev}
+    password: ${DB_PASSWORD:dev3216}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA設定
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update} # 開発環境: update, 本番環境: validate または none
+    show-sql: ${SHOW_SQL:true} # SQLをコンソールに表示(開発環境のみ）
+    properties:
+      hibernate:
+        format_sql: true # SQLを整形して表示
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false # OSIVを無効化
+
+# JWT設定
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000} # 24時間（ミリ秒）
+
+# パスワード設定
+password:
+  min-length: ${PASSWORD_MIN_LENGTH:8}
+  max-length: ${PASSWORD_MAX_LENGTH:128}
+  require-uppercase: ${PASSWORD_REQUIRE_UPPERCASE:true}
+  require-lowercase: ${PASSWORD_REQUIRE_LOWERCASE:true}
+  require-digit: ${PASSWORD_REQUIRE_DIGIT:true}
+  require-special-char: ${PASSWORD_REQUIRE_SPECIAL_CHAR:false}
+
+# サーバー設定
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+# ログ設定
+logging:
+  level:
+    root: INFO
+    com.oshikatsu: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
