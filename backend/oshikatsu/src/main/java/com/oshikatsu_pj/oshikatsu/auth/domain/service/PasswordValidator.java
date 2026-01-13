@@ -49,7 +49,7 @@ public class PasswordValidator {
         }
 
         // 数字チェック
-        if (passwordPolicy.isRequireNumber()
+        if (passwordPolicy.isRequireDigit()
                 && !hasDigit(trimmedPassword)) {
             throw new IllegalArgumentException("パスワードには数字を含める必要があります。");
         }

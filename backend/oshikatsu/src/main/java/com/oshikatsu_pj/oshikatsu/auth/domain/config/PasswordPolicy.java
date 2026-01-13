@@ -17,6 +17,6 @@ public class PasswordPolicy {
     private int maxLength = 128;
     private boolean requireUppercase = true;
     private boolean requireLowercase = true;
-    private boolean requireNumber = true;
+    private boolean requireDigit = true;
     private boolean requireSpecialChar = false;
 }
