@@ -84,7 +84,7 @@ public class AuthService {
 
         // UserDetailsよりトークン生成
         UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getUsername());
-        String token = jwtTokenProvider.generateToken(userDetails);
+        String token = jwtTokenProvider.generateToken(userDetails, savedUser.getId());
 
         // レスポンスを生成
         return new AuthResponse(
@@ -115,12 +115,13 @@ public class AuthService {
             if (userDetails == null) {
                 throw new RuntimeException("内部エラーが発生しました。");
             }
-            // トークン生成
-            String token = jwtTokenProvider.generateToken(userDetails);
 
-            // ユーザー情報を取得
+            // ユーザー情報を取得（トークン生成前にuserIdが必要）
             User user = userRepository.findByUsername(request.getUsername())
                     .orElseThrow(() -> new IllegalArgumentException("ユーザーが見つかりません"));
+
+            // トークン生成（userIdを含める）
+            String token = jwtTokenProvider.generateToken(userDetails, user.getId());
 
             // レスポンスを生成
             return new AuthResponse(
