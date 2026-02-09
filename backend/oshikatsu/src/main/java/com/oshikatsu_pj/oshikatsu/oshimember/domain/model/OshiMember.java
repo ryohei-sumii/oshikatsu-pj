@@ -1,13 +1,16 @@
 package com.oshikatsu_pj.oshikatsu.oshimember.domain.model;
 
+import com.oshikatsu_pj.oshikatsu.auth.domain.model.User;
 import com.oshikatsu_pj.oshikatsu.oshigroup.domain.model.OshiGroup;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Getter
 @Entity
 @Table(name = "oshi_member")
 public class OshiMember {
@@ -15,6 +18,18 @@ public class OshiMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "fk_oshi_member_user",
+                    value = ConstraintMode.CONSTRAINT
+            )
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -31,6 +46,9 @@ public class OshiMember {
     @Column(nullable = false, name = "member_name")
     private String memberName;
 
+    @Column(nullable = false, name = "member_name_kana")
+    private String memberNameKana;
+
     @Column(nullable = false, name = "gender")
     private byte gender;
 
@@ -45,13 +63,19 @@ public class OshiMember {
     private LocalDateTime updatedAt;
 
     // JPA用のデフォルトコンストラクタ
-    public OshiMember() {}
+    protected OshiMember() {}
 
     // ビジネスロジック用のコンストラクタ
-    public OshiMember(String memberName,
+    public OshiMember(User user,
+                      OshiGroup oshiGroup,
+                      String memberName,
+                      String memberNameKana,
                       byte gender,
                       LocalDate birthDay) {
+        this.user = user;
+        this.oshiGroup = oshiGroup;
         this.memberName = memberName;
+        this.memberNameKana = memberNameKana;
         this.gender = gender;
         this.birthDay = birthDay;
         this.createdAt = LocalDateTime.now();
@@ -59,9 +83,11 @@ public class OshiMember {
     }
 
     public void update(String memberName,
+                       String memberNameKana,
                        byte gender,
                        LocalDate birthDay) {
         this.memberName = memberName;
+        this.memberNameKana = memberNameKana;
         this.gender = gender;
         this.birthDay = birthDay;
         this.updatedAt = LocalDateTime.now();

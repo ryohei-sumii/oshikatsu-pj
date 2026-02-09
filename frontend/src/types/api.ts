@@ -51,6 +51,38 @@ export interface OshiGroupResponse {
   updatedAt: string;
 }
 
+/** 推しメンバー作成リクエスト（CreateOshiMemberRequest と対応） */
+export interface CreateOshiMemberRequest {
+  groupId: number;
+  memberName: string;
+  memberNameKana: string;
+  gender: number; // 0: 男性, 1: 女性
+  birthDay: string; // ISO 8601 format: YYYY-MM-DD
+}
+
+/** 推しメンバー更新リクエスト（UpdateOshiMemberRequest と対応） */
+export interface UpdateOshiMemberRequest {
+  memberId: number;
+  memberName: string;
+  memberNameKana: string;
+  gender: number; // 0: 男性, 1: 女性
+  birthDay: string; // ISO 8601 format: YYYY-MM-DD
+}
+
+/** 推しメンバーレスポンス（OshiMemberResponse と対応） */
+export interface OshiMemberResponse {
+  id: number;
+  userId: number;
+  groupId: number;
+  groupName: string;
+  memberName: string;
+  memberNameKana: string;
+  gender: number;
+  birthDay: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /**
  * バックエンド GlobalExceptionHandler が返すエラーレスポンス形式
  * - バリデーションエラー: { status, message, errors: Record<string, string> }

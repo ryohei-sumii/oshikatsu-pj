@@ -49,6 +49,19 @@ public class OshiGroup {
     protected OshiGroup() {}
 
     // ビジネスロジック用のコンストラクタ
+    public OshiGroup(User user,
+                     String groupName,
+                     String company,
+                     String description) {
+        this.user = user;
+        this.groupName = groupName;
+        this.company = company;
+        this.description = description;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // テスト用のコンストラクタ（userなし）
     public OshiGroup(String groupName,
                      String company,
                      String description) {

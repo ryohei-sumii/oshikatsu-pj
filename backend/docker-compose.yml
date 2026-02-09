@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  # MySQLデータベース
+  db:
+    image: mysql:8.0
+    container_name: oshikatsu-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-oshikatsu_db}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      TZ: 'Asia/Tokyo'
+    ports:
+      - "${DB_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-db:/docker-entrypoint-initdb.d  # 初期化SQLスクリプト用（オプション）
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    networks:
+      - oshikatsu-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Spring Bootアプリケーション
+  app:
+    build:
+      context: ./oshikatsu
+      dockerfile: Dockerfile
+    container_name: oshikatsu-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${DB_NAME:-oshikatsu_db}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Tokyo
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${HIBERNATE_DDL_AUTO:-update}
+      SPRING_JPA_SHOW_SQL: ${SHOW_SQL:-false}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      PASSWORD_MIN_LENGTH: ${PASSWORD_MIN_LENGTH}
+      PASSWORD_MAX_LENGTH: ${PASSWORD_MAX_LENGTH}
+      PASSWORD_REQUIRE_UPPERCASE: ${PASSWORD_REQUIRE_UPPERCASE}
+      PASSWORD_REQUIRE_LOWERCASE: ${PASSWORD_REQUIRE_LOWERCASE}
+      PASSWORD_REQUIRE_DIGIT: ${PASSWORD_REQUIRE_DIGIT}
+      PASSWORD_REQUIRE_SPECIAL_CHAR: ${PASSWORD_REQUIRE_SPECIAL_CHAR}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    networks:
+      - oshikatsu-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # phpMyAdmin（開発時のDB管理用、オプション）
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: oshikatsu-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+    networks:
+      - oshikatsu-network
+    profiles:
+      - dev  # 開発時のみ起動: docker-compose --profile dev up
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  oshikatsu-network:
+    driver: bridge

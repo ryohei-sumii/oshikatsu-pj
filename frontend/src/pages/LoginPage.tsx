@@ -6,9 +6,9 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ApiError } from '../lib/apiClient';
-import { loginSchema } from '../lib/validation';
-import { ErrorMessage } from '../components/ErrorMessage';
+import { ApiError } from '../infrastructure/api/client';
+import { loginSchema } from '../application/validators/authValidator';
+import { ErrorMessage } from '../presentation/components/ErrorMessage';
 import './LoginPage.css';
 
 export function LoginPage() {

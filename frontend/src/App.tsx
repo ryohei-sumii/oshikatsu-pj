@@ -5,13 +5,13 @@
 
 import { Navigate, Route, BrowserRouter, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { AppLayout } from './components/AppLayout';
+import { ProtectedRoute } from './presentation/components/ProtectedRoute';
+import { AppLayout } from './presentation/components/AppLayout';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { OshiGroupPage } from './pages/OshiGroupPage';
-import { OshiMemberPage } from './pages/OshiMemberPage';
+import { OshiGroupPage } from './presentation/pages/oshiGroup/OshiGroupPage';
+import { OshiMemberPage } from './presentation/pages/oshiMember/OshiMemberPage';
 import './App.css';
 
 function App() {
