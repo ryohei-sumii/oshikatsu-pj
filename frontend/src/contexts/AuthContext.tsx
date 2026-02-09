@@ -13,7 +13,7 @@ import {
   type ReactNode,
 } from 'react';
 import { login as loginApi } from '../api/authApi';
-import { clearStoredToken, getStoredToken, setStoredToken } from '../lib/apiClient';
+import { clearStoredToken, getStoredToken, setStoredToken } from '../infrastructure/api/client';
 import type { AuthResponse } from '../types/api';
 
 interface AuthState {

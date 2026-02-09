@@ -7,9 +7,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register as registerApi } from '../api/authApi';
 import { useAuth } from '../contexts/AuthContext';
-import { ApiError } from '../lib/apiClient';
-import { registerSchema } from '../lib/validation';
-import { ErrorMessage } from '../components/ErrorMessage';
+import { ApiError } from '../infrastructure/api/client';
+import { registerSchema } from '../application/validators/authValidator';
+import { ErrorMessage } from '../presentation/components/ErrorMessage';
 import './RegisterPage.css';
 
 export function RegisterPage() {

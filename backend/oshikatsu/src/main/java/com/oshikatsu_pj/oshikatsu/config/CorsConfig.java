@@ -17,9 +17,8 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         // 許可するオリジン（フロントエンドのURL）
-        corsConfiguration.addAllowedOrigin(
-                "http://localhost:3000" // フロントエンドはReactの想定
-        );
+        corsConfiguration.addAllowedOrigin("http://localhost:5173"); // Vite (React)
+        corsConfiguration.addAllowedOrigin("http://localhost:3000"); // 予備（Create React App等）
 
         // 許可するHTTPメソッド
         corsConfiguration.addAllowedMethod(HttpMethod.GET);

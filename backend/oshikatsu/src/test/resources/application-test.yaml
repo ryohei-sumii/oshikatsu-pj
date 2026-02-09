@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: oshikatsu-test
+
+  # H2インメモリデータベース設定（テスト用）
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  # JPA設定
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # テスト実行毎にスキーマを再作成
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+
+  # H2コンソールを有効化（デバッグ用）
+  h2:
+    console:
+      enabled: true
+
+  # セキュリティ設定を無効化（テスト用）
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration
+      - org.springframework.boot.security.autoconfigure.web.servlet.SecurityFilterAutoConfiguration
+      - org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+  
+  # セキュリティを無効化
+  security:
+    enabled: false
+
+# JWT設定（テスト用）
+jwt:
+  secret: test-secret-key-for-testing-purposes-only-123456789
+  expiration: 86400000 # 24時間
+
+# パスワード設定（テスト用）
+password:
+  min-length: 8
+  max-length: 128
+  require-uppercase: true
+  require-lowercase: true
+  require-digit: true
+  require-special-char: false
+
+# ログ設定（テスト用）
+logging:
+  level:
+    root: WARN
+    com.oshikatsu_pj.oshikatsu: DEBUG
+    org.hibernate.SQL: DEBUG

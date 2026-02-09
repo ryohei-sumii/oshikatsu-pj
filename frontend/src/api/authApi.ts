@@ -3,7 +3,7 @@
  * バックエンド AuthController に対応
  */
 
-import { apiRequest } from '../lib/apiClient';
+import { apiRequest } from '../infrastructure/api/client';
 import type { AuthResponse, LoginRequest, RegisterRequest } from '../types/api';
 
 /**

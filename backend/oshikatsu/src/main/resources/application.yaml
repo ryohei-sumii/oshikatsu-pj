@@ -4,7 +4,7 @@ spring:
 
   # データソース設定(MySQL)
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:oshikatsu_db}?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:oshikatsu_db}?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME:ryodev}
     password: ${DB_PASSWORD:dev3216}
     driver-class-name: com.mysql.cj.jdbc.Driver
